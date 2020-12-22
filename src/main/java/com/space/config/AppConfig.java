@@ -49,7 +49,6 @@ public class AppConfig {
         //dataSource.setUsername("root");
         dataSource.setPassword("root");
 
-
         // After deploying remove next line !!!!
         dataSource.setUrl("jdbc:mysql://192.168.75.240:3306/cosmoport?serverTimezone=UTC");
         dataSource.setUsername("cosmoport");
