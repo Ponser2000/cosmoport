@@ -53,7 +53,6 @@ public class AppConfig {
         dataSource.setUrl("jdbc:mysql://192.168.75.240:3306/cosmoport?serverTimezone=UTC");
         dataSource.setUsername("cosmoport");
 
-
         return dataSource;
     }
 
