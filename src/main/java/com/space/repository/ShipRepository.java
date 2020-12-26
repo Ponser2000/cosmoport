@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
 
 /**
  * @author Sergey Ponomarev on 23.12.2020
- * @project cosmoport/com.space.repository.dto
+ * @project cosmoport/com.space.repository
  */
 
 @Repository
-public interface ShipRepository extends JpaRepository<Ship,Long>, JpaSpecificationExecutor<Ship> {
+public interface ShipRepository extends JpaRepository<Ship, Long>, JpaSpecificationExecutor<Ship> {
 
 }
