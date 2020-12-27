@@ -50,4 +50,28 @@ public class ShipController {
     Page<Ship> result = shipService.getAllShips(params);
     return new ResponseEntity<>(result.getContent(), HttpStatus.OK);
   }
+
+  @GetMapping("/ships1")
+  public ResponseEntity<?> getAllShipsList(@RequestParam Map<String, String> params){
+
+    if (!params.containsKey("order")) {
+      params.put("order","id");
+    }
+
+    if(!params.containsKey("pageNumber")) {
+      params.put("pageNumber","0");
+    }
+    if(!params.containsKey("pageSize")){
+      params.put("pageSize","3");
+    }
+
+    if(params.containsKey("isUsed")){
+      params.put("isUsed","true");
+    } else {
+      params.put("isUsed","false");
+    }
+
+    List<Ship> result = shipService.getAllShipsList(params);
+    return new ResponseEntity<>(result, HttpStatus.OK);
+  }
 }

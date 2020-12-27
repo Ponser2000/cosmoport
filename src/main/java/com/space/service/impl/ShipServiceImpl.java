@@ -6,6 +6,7 @@ import com.space.model.Ship;
 import com.space.service.ShipService;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,7 +37,29 @@ public class ShipServiceImpl implements ShipService {
     int pageSize = Integer.parseInt(params.get("pageSize"));
     String order = params.get("order");
     Page<Ship> result = repository.findAll(specification, PageRequest.of(pageNumber,pageSize, Sort.by(order)));
-    return result;
+
+     return result;
+  }
+
+  public List<Ship> getAllShipsList(Map<String, String> params){
+
+    List<Ship> ships = repository.findAll();
+    if (params.containsKey("name")) {
+      ships = ships.stream()
+          .filter((elm)-> elm.getName().contains(params.get("name")))
+          .sorted((o1,o2) -> o1.getName().compareTo(o2.getName()))
+          .collect(Collectors.toList());
+    }
+
+    if (params.containsKey("planet")) {
+      ships = ships.stream()
+          .filter((elm)-> elm.getPlanet().contains(params.get("planet")))
+          .sorted((o1,o2) -> o1.getName().compareTo(o2.getName()))
+          .collect(Collectors.toList());
+    }
+
+
+    return ships;
   }
 
 
