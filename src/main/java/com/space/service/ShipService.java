@@ -11,6 +11,6 @@ import org.springframework.data.domain.Page;
  */
 
 public interface ShipService {
-  Page<Ship> getAllShips(Map<String, String> params);
   List<Ship> getAllShipsList(Map<String, String> params);
+  Ship getShipById(Long id);
 }
