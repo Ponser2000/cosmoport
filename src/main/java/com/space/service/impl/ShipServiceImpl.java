@@ -52,6 +52,69 @@ public class ShipServiceImpl implements ShipService {
     repository.deleteById(id);
   }
 
+  public Ship createShip(Map<String,String> params){
+    Calendar prodCal = Calendar.getInstance();
+    Ship ship = new Ship();
+
+    if(params.containsKey("name")) {
+      if (params.get("name").length() == 0 || params.get("name").length() > 50)
+        throw new BadRequestException();
+      ship.setName(params.get("name"));
+    } else
+      throw new BadRequestException();
+
+    if(params.containsKey("planet")) {
+      if (params.get("planet").length() == 0 || params.get("planet").length() > 50)
+        throw new BadRequestException();
+      ship.setPlanet(params.get("planet"));
+    } else
+      throw new BadRequestException();
+
+    if (params.containsKey("shipType")){
+      ShipType shipType = ShipType.valueOf(params.get("shipType"));
+      ship.setShipType(shipType);
+    } else
+      throw new BadRequestException();
+
+    if (params.containsKey("prodDate")) {
+      prodCal.setTime(new Date(Long.parseLong(params.get("prodDate"))));
+      if (prodCal.get(Calendar.YEAR) < 2800 || prodCal.get(Calendar.YEAR) > 3019)
+        throw new BadRequestException();
+      ship.setProdDate(prodCal.getTime());
+    } else
+      throw new BadRequestException();
+
+
+    if (params.containsKey("isUsed"))
+      ship.setUsed(Boolean.parseBoolean(params.get("isUsed")));
+    else ship.setUsed(false);
+
+    if (params.containsKey("speed")) {
+      double speed = Double.parseDouble(params.get("speed"));
+      if ( speed < 0.01 || speed > 0.99) {
+        throw new BadRequestException();
+      }
+      ship.setSpeed(speed);
+    } else throw new BadRequestException();
+
+    if (params.containsKey("crewSize")) {
+      int crewSize = Integer.parseInt(params.get("crewSize"));
+      if ( crewSize < 1 || crewSize > 9999) {
+        throw new BadRequestException();
+      }
+      ship.setCrewSize(crewSize);
+    } else
+      throw new BadRequestException();
+
+    prodCal.setTime(ship.getProdDate());
+    BigDecimal rating = new BigDecimal(80 * ship.getSpeed() *(ship.isUsed() ? 0.5 : 1)/(3019- prodCal.get(Calendar.YEAR) + 1));
+    ship.setRating(rating.setScale(2, RoundingMode.HALF_UP).doubleValue());
+
+
+    return repository.save(ship);
+
+  }
+
   public Ship updateShipById(Long id,Map<String,String> params) {
     Ship updateShip = repository.findById(id).get();
     Calendar prodCal = Calendar.getInstance();

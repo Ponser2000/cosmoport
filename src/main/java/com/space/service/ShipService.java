@@ -15,5 +15,6 @@ public interface ShipService {
   List<Ship> getAllShipsList(Map<String, String> params);
   Optional<Ship> getShipById(Long id);
   Ship updateShipById(Long id,Map<String,String> params);
+  Ship createShip(Map<String,String> params);
   public void deleteShipById(Long id);
 }

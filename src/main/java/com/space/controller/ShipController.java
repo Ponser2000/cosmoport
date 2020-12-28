@@ -1,5 +1,7 @@
 package com.space.controller;
 
+import com.space.exceptions.BadRequestException;
+import com.space.exceptions.NotFoundException;
 import com.space.model.Ship;
 import com.space.service.ShipService;
 import java.util.List;
@@ -59,10 +61,10 @@ public class ShipController {
     if ( (id != null) && id.matches("-?\\d++") ) {
        value = Long.parseLong(id);
        if (value == 0) {
-         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+         throw new BadRequestException();
        }
     } else {
-      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      throw new BadRequestException();
     }
 
     Optional<Ship> ship = shipService.getShipById(value);
@@ -70,8 +72,15 @@ public class ShipController {
     if ( ship.isPresent()) {
       return new ResponseEntity<>(ship.get(), HttpStatus.OK);
     } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      throw new NotFoundException();
     }
+  }
+
+  @PostMapping("/ships")
+  @ResponseBody
+  public ResponseEntity<?> createNewShip(@RequestBody Map<String,String> params){
+    Ship ship = shipService.createShip(params);
+    return new ResponseEntity<>(ship, HttpStatus.OK);
   }
 
   @DeleteMapping("/ships/{id}")
@@ -81,10 +90,10 @@ public class ShipController {
     if ( (id != null) && id.matches("-?\\d++") ) {
       value = Long.parseLong(id);
       if (value == 0) {
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        throw new BadRequestException();
       }
     } else {
-      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      throw new BadRequestException();
     }
     Optional<Ship> ship = shipService.getShipById(value);
 
@@ -92,7 +101,7 @@ public class ShipController {
       shipService.deleteShipById(value);
       return new ResponseEntity<>( HttpStatus.OK);
     } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      throw new NotFoundException();
     }
   }
 
@@ -105,10 +114,10 @@ public class ShipController {
     if ( (id != null) && id.matches("-?\\d++") ) {
       value = Long.parseLong(id);
       if (value == 0) {
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        throw new BadRequestException();
       }
     } else {
-      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      throw new BadRequestException();
     }
 
     Optional<Ship> shipTest = shipService.getShipById(value);
@@ -122,7 +131,7 @@ public class ShipController {
         }
 
     } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      throw new NotFoundException();
     }
 
   }
